@@ -7,9 +7,9 @@
   "type": "commonjs",
   "main": "index.js",
  "scripts": {
-  "dev": "nodemon Backend/index.js",
+  "dev": "NODE_ENV=development nodemon Backend/index.js",
   "build": "npm install --prefix Frontend/mernStack && npm run build --prefix Frontend/mernStack",
-  "start": "node Backend/index.js"
+  "start": " NODE_ENV=production node Backend/index.js"
 },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
