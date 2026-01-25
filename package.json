@@ -6,11 +6,11 @@
   "author": "",
   "type": "commonjs",
   "main": "index.js",
- "scripts": {
-  "dev": "NODE_ENV=development nodemon Backend/index.js",
-  "build": "npm install --prefix Frontend/mernStack && npm run build --prefix Frontend/mernStack",
-  "start": "NODE_ENV=production node Backend/index.js"
-},
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon Backend/index.js",
+    "build": "npm install --prefix Frontend/mernStack && npm run build --prefix Frontend/mernStack",
+    "start": "NODE_ENV=production node Backend/index.js"
+  },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "bcryptjs": "^3.0.3",
@@ -27,6 +27,7 @@
     "vite": "^7.3.1"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0"
   }
