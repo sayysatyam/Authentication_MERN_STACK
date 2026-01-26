@@ -3,7 +3,7 @@ require("dotenv").config();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sender = {
-  email: "onboarding@resend.dev",
+  email: "no-reply@zorixs.shop",
   name: "Satyam",
 };
 
