@@ -1,19 +1,20 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 require("dotenv").config();
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const mailtrapClient = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // Must be false for port 587
-  auth: {
-    user: process.env.EMAIL_USER, 
-    pass: process.env.EMAIL_PASS, // Must be a 16-character App Password
-  },
-});
-
+// keep sender format (like before)
 const sender = {
-  email: process.env.EMAIL_USER,
+  email: "onboarding@resend.dev",
   name: "Satyam",
 };
 
-module.exports = { mailtrapClient, sender };
+const sendMail = async ({ to, subject, html }) => {
+  return await resend.emails.send({
+    from: `"${sender.name}" <${sender.email}>`,
+    to,
+    subject,
+    html,
+  });
+};
+
+module.exports = { sendMail, sender };
