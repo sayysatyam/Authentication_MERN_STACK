@@ -6,8 +6,7 @@ const path = require("path");
 
 const { connectMongoDb } = require("./connection");
 const authRoute = require("./Router/authRouter");
-
-dotenv.config();
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3000;
