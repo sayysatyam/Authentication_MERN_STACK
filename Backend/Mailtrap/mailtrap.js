@@ -5,7 +5,6 @@ const mailtrapClient = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false, // Must be false for port 587
-  requireTLS: true, // Forces a secure connection
   auth: {
     user: process.env.EMAIL_USER, 
     pass: process.env.EMAIL_PASS, // Must be a 16-character App Password
