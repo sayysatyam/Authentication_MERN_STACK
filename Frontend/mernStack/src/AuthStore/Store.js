@@ -105,17 +105,18 @@ forgetPassword : async(email)=>{
                 set({forgotPasserror:error.response?.data?.message|| "Invalid Credentials", isLoading:false});
             }
         },
-verifyresettoken :  async (token)=>{
-                set({verifyLoading:true,error:null});
-                try {
-                 await axios.get(`${API_URL}/reset-password/${token}`);
-                 set({verifyLoading:false})
-                } catch (error) {
-                    set({error:error.response?.data?.message|| "Invalid Credentials", verifyLoading:false});
-                }finally {
+verifyresettoken: async (token) => {
+  set({ verifyLoading: true, error: null });
+  try {
+    await axios.get(`${API_URL}/reset-password/${token}`);
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Invalid Credentials",
+    });
+  } finally {
     set({ verifyLoading: false });
   }
-        },
+},
     resetpassword :async(token,password)=>{
         set({isLoading:true,error:null});
         try {

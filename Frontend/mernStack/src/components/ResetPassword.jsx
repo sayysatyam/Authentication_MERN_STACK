@@ -23,11 +23,13 @@ const ResetPassword = () => {
   } = useAuthStore();
 
 
-  useEffect(() => {
-    if (token) {
-      verifyresettoken(token);
-    }
-  }, [token, verifyresettoken]);
+ useEffect(() => {
+  let mounted = true;
+  if (token && mounted) {
+    verifyresettoken(token);
+  }
+  return () => (mounted = false);
+}, [token]);
 
   const revielPassword = () => {
   setshowpassword(prev => !prev);
@@ -88,18 +90,22 @@ const ResetPassword = () => {
   }
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-            if(password !== confirmPassword){
-              setlocalError("Password do not match");
-              return;
-            }
-    const success = await resetpassword(token, password);
-    if (success) {
-      toast.success("Password reset successfully 🎉");
-      setTimeout(() => navigate("/login"), 1000);
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setlocalError("");
+
+  if (password !== confirmPassword) {
+    setlocalError("Password do not match");
+    return;
+  }
+
+  const success = await resetpassword(token, password);
+  if (success) {
+    toast.success("Password reset successfully 🎉");
+    setTimeout(() => navigate("/login"), 1000);
+  }
+};
+
 
 
   return (
