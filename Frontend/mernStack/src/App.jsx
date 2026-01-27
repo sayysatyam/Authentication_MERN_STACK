@@ -123,7 +123,6 @@ const App = () => {
               </VerifyEmailRoute>
             }
           />
-
           <Route
             path="/forgot-password"
             element={

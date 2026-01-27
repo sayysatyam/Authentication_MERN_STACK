@@ -80,7 +80,7 @@ const VerifyEmail = () => {
         sm:max-w-md
         md:max-w-lg
         flex flex-col items-center
-         px-10 py-10 sm:p-6
+         px-4 py-10 sm:p-6
         gap-6 sm:gap-8
         rounded-2xl border border-purple-800/40
         bg-linear-to-br from-purple-950 to-gray-900
