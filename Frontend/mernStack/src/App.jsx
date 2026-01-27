@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 import Signup from "./components/Signup";
 import ResetPassword from "./components/ResetPassword";
 import HomePage from "./components/HomePage";
@@ -32,10 +32,8 @@ const RedirectAuthenticatedUser = ({ children }) => {
   if (isAuthenticated && user?.isVerified) {
     return <Navigate to="/" replace />;
   }
-
   return children;
 };
-
 const VerifyEmailRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
@@ -52,16 +50,29 @@ const VerifyEmailRoute = ({ children }) => {
 
 
 const App = () => {
+    const location = useLocation();
   const { checkAuth, isCheckingAuth } = useAuthStore();
 
   useEffect(() => {
+    if (location.pathname.startsWith("/reset-password")) {
+      return;
+    }
     checkAuth();
-  }, [checkAuth]);
+  }, [checkAuth,location.pathname]);
 
   if (isCheckingAuth) return <LoadingSpinner/>;
 // from-gray-950 via-purple-950 to-gray-900
   return (
-    <div className="flex justify-center items-center h-screen bg-linear-to-r // from-gray-950 via-purple-950 to-gray-900">
+    <div className=" min-h-screen 
+  flex 
+  items-center 
+  justify-center 
+  px-6 
+  py-6
+  bg-linear-to-r 
+  from-gray-950 
+  via-purple-950 
+  to-gray-900">
       <Routes>
         <Route
           path="/"
@@ -117,18 +128,18 @@ const App = () => {
 
         <Route
           path="/reset-password/:token"
-          element={
-            <RedirectAuthenticatedUser>
-              <ResetPassword />
-            </RedirectAuthenticatedUser>
+          element={<ResetPassword />
           }
         />
 
-        {/* Fallback */}
-        <Route
-          path="*"
-          element={<Navigate to="/" replace />}
-        />
+       <Route
+  path="*"
+  element={
+    location.pathname.startsWith("/reset-password") ? null : (
+      <Navigate to="/" replace />
+    )
+  }
+/>
 
       </Routes>
     </div>
