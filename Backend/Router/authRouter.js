@@ -1,8 +1,9 @@
 const express = require("express");
 const route = express.Router();
-const {login,logout,signup,verifyEmail,forgotPassword,resetPassword, checkAuth, verifyResetToken} = require("../controller/auth");
+const {login,logout,signup,verifyEmail,forgotPassword,resetPassword, checkAuth, verifyResetToken, resendVerificationCode} = require("../controller/auth");
 const {verifyToken} = require('../MiddleWare/user')
-route.get("/check-auth",verifyToken,checkAuth)
+route.get("/check-auth",verifyToken,checkAuth);
+route.post("/resendCode",verifyToken,resendVerificationCode);
 route.post("/signup",signup);
 route.post("/verify-email",verifyEmail);
 route.post("/login",login);

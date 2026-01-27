@@ -10,9 +10,10 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
   const inputRefs = useRef([]);
 
-  const { verifyEmail, error, isLoading, clearError } = useAuthStore();
+  const { verifyEmail, error, isLoading, clearError,resendVerificationCode } = useAuthStore();
 
   const [code, setCode] = useState(Array(OTP_LENGTH).fill(""));
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   useEffect(() => {
     clearError();
@@ -65,13 +66,31 @@ const VerifyEmail = () => {
       navigate("/login");
     }
   };
+const resendEmailCode = async(e)=>{
+    e?.preventDefault();
+    const success = await resendVerificationCode();
+     if (success) {
+  toast.success("Verification code sent to your email ✅");
+  setCode(Array(OTP_LENGTH).fill(""));
+  inputRefs.current[0]?.focus();
+  setResendCooldown(60);
+}
 
+};
   useEffect(() => {
     if (code.every((digit) => digit !== "")) {
       handleSubmit();
     }
   }, [code]);
+useEffect(() => {
+  if (resendCooldown <= 0) return;
 
+  const timer = setInterval(() => {
+    setResendCooldown((prev) => prev - 1);
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, [resendCooldown]);
   return (
     <div
       className="
@@ -145,6 +164,20 @@ const VerifyEmail = () => {
           )}
         </button>
       </form>
+      <p className="text-white">Didn't get a code? <button
+  onClick={resendEmailCode}
+  disabled={resendCooldown > 0 || isLoading}
+  className="
+    text-blue-400
+    cursor-pointer
+    disabled:opacity-50
+    disabled:cursor-not-allowed
+  "
+>
+  {resendCooldown > 0
+    ? `Resend in ${resendCooldown}s`
+    : "Resend"}
+</button></p>
 
       {error && (
         <p className="text-red-400 font-medium text-sm text-center">

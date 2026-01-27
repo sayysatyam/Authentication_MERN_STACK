@@ -42,6 +42,70 @@ await User.save();
 
 
 };
+ const resendVerificationCode = async (req, res) => {
+  try {
+    const reverifyCodeUser = await user.findById(req.userId);
+
+    if (!reverifyCodeUser) {
+      return res.status(404).json({
+        success: false,
+        msg: "User not found",
+      });
+    }
+
+    if (reverifyCodeUser.isVerified) {
+      return res.status(400).json({
+        success: false,
+        msg: "User already verified",
+      });
+    }
+    const COOLDOWN_TIME = 60 * 1000; 
+
+    if (
+      reverifyCodeUser.lastVerificationEmailSentAt &&
+      Date.now() - reverifyCodeUser.lastVerificationEmailSentAt.getTime() <
+        COOLDOWN_TIME
+    ) {
+      const remainingSeconds = Math.ceil(
+        (COOLDOWN_TIME -
+          (Date.now() -
+            reverifyCodeUser.lastVerificationEmailSentAt.getTime())) / 1000
+      );
+
+      return res.status(429).json({
+        success: false,
+        msg: `Please wait ${remainingSeconds}s before resending the verification email`,
+      });
+    }
+    let verificationCode;
+do {
+  verificationCode = generateVerificationCode();
+} while (verificationCode.length !== 6);
+        
+    reverifyCodeUser.verificationToken = verificationCode;
+    reverifyCodeUser.verificationTokenExpireAt =
+      Date.now() + 24 * 60 * 60 * 1000;
+    reverifyCodeUser.lastVerificationEmailSentAt = Date.now();
+
+    await reverifyCodeUser.save();
+
+    await sendVerificationEmail(
+      reverifyCodeUser.email,
+      verificationCode
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Verification email resent successfully",
+    });
+  } catch (error) {
+    console.error("Error in resendVerificationCode:", error);
+    return res.status(500).json({
+      success: false,
+      msg: "Server error",
+    });
+  }
+};
 
 const verifyEmail = async(req,res)=>{
     const {code} = req.body;
@@ -56,6 +120,7 @@ const verifyEmail = async(req,res)=>{
         verifiedUser.isVerified = true;
         verifiedUser.verificationToken = undefined;
         verifiedUser.verificationTokenExpireAt = undefined;
+        verifiedUser.lastVerificationEmailSentAt=undefined;
         await verifiedUser.save();
         await sendWelcomeEmail(verifiedUser.email, verifiedUser.name);
         res.clearCookie("uid");
@@ -198,6 +263,6 @@ const checkAuth = async(req,res)=>{
 		res.status(500).json({ success: false, msg: error.message });
     }
 }
-module.exports = {signup,login,logout,verifyEmail,forgotPassword,resetPassword,checkAuth,verifyResetToken};
+module.exports = {signup,login,logout,verifyEmail,forgotPassword,resetPassword,checkAuth,verifyResetToken,resendVerificationCode};
 
 
