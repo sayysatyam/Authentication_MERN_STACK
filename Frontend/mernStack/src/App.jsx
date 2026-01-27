@@ -60,7 +60,12 @@ const App = () => {
     checkAuth();
   }, [checkAuth,location.pathname]);
 
-  if (isCheckingAuth) return <LoadingSpinner/>;
+ if (
+  isCheckingAuth &&
+  !location.pathname.startsWith("/reset-password")
+) {
+  return <LoadingSpinner />;
+}
 // from-gray-950 via-purple-950 to-gray-900
   return (
     <div className=" min-h-screen 
@@ -128,18 +133,10 @@ const App = () => {
 
         <Route
           path="/reset-password/:token"
-          element={<ResetPassword />
-          }
+          element={<ResetPassword/>}
         />
 
-       <Route
-  path="*"
-  element={
-    location.pathname.startsWith("/reset-password") ? null : (
-      <Navigate to="/" replace />
-    )
-  }
-/>
+       <Route path="*" element={<div>404</div>} />
 
       </Routes>
     </div>

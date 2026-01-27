@@ -112,7 +112,9 @@ verifyresettoken :  async (token)=>{
                  set({verifyLoading:false})
                 } catch (error) {
                     set({error:error.response?.data?.message|| "Invalid Credentials", verifyLoading:false});
-                }
+                }finally {
+    set({ verifyLoading: false });
+  }
         },
     resetpassword :async(token,password)=>{
         set({isLoading:true,error:null});

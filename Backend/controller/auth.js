@@ -113,7 +113,7 @@ const forgotPassword = async(req,res)=>{
                 validateUser.resetPasswordExpireAt = resetTokenExpires;
                 	await validateUser.save();
                 await sendPasswordResetEmail(validateUser.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`);
-      
+                 console.log("CLIENT_URL =", process.env.CLIENT_URL);
                 res.status(200).json({ success: true, message: "Password reset link sent to your email", user:{...validateUser} });
         } 
        catch(error){
