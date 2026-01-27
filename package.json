@@ -17,6 +17,7 @@
     "mailtrap": "^4.4.0",
     "mongoose": "^9.1.5",
     "nodemailer": "^7.0.12",
+    "react-hot-toast": "^2.6.0",
     "resend": "^6.8.0"
   },
   "devDependencies": {

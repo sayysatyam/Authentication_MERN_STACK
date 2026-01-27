@@ -3,7 +3,7 @@ import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../AuthStore/Store";
 import verifyemail from "../assets/image/newVerifyEmail.png";
-
+import toast from "react-hot-toast";
 const OTP_LENGTH = 6;
 
 const VerifyEmail = () => {
@@ -61,6 +61,7 @@ const VerifyEmail = () => {
     const success = await verifyEmail(otp);
 
     if (success) {
+      toast.success("Email verified successfully ✅");
       navigate("/login");
     }
   };

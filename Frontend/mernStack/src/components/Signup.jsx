@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { CircleUserRound, Lock, LogIn, Mail, Loader } from "lucide-react";
+import { CircleUserRound, Lock, LogIn, Mail, Loader, Eye, EyeClosed } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "./PasswordStrenght";
 import { useAuthStore } from "../AuthStore/Store";
-
+import toast from "react-hot-toast";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showpassword, setshowpassword] = useState(false);
   const { signup, signupError, isLoading, clearError } = useAuthStore();
   const navigate = useNavigate();
 
@@ -21,10 +21,13 @@ const SignUp = () => {
 
     const success = await signup(name, email, password);
     if (success) {
+      toast.success("Signup successful 🎊");
       navigate("/verify-email");
     }
   };
-
+const revielPassword = () => {
+  setshowpassword(prev => !prev);
+};
   return (
     <div
       className="
@@ -121,7 +124,7 @@ const SignUp = () => {
             size={22}
           />
           <input
-            type="password"
+            type={showpassword  ? "text" : "password"}
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -134,6 +137,13 @@ const SignUp = () => {
             "
             required
           />
+          <button type="button" className='cursor-pointer' onClick={revielPassword}>{showpassword ? (<Eye
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={22}
+            />) : (<EyeClosed
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={22}
+            />)}</button>
         </div>
 
         {/* Error */}

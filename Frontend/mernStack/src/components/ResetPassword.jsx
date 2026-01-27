@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Loader, Lock } from "lucide-react";
+import { Eye, EyeClosed, Loader, Lock } from "lucide-react";
 import keyIcon from "../assets/image/keyIcon.png";
 import PasswordStrengthMeter from "./PasswordStrenght";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthStore } from "../AuthStore/Store";
-
+import toast from "react-hot-toast";
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
+  const [showpassword, setshowpassword] = useState(false);
+  const [showconfirmpassword, setshowconfirmpassword] = useState(false);
+  const [localError, setlocalError] = useState("");
   const { token } = useParams();
   const navigate = useNavigate();
 
@@ -25,6 +29,12 @@ const ResetPassword = () => {
     }
   }, [token, verifyresettoken]);
 
+  const revielPassword = () => {
+  setshowpassword(prev => !prev);
+};
+ const revielconfirmPassword = () => {
+  setshowconfirmpassword(prev => !prev);
+};
 
   if (verifyLoading) {
     return (
@@ -68,7 +78,7 @@ const ResetPassword = () => {
             text-white font-semibold
             transition-transform duration-200
             hover:scale-[1.02] active:scale-[0.97]
-            hover:from-purple-500 hover:to-violet-500
+            hover:from-purple-500 hover:to-violet-500 cursor-pointer
           "
         >
           Request New Link
@@ -80,9 +90,13 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+            if(password !== confirmPassword){
+              setlocalError("Password do not match");
+              return;
+            }
     const success = await resetpassword(token, password);
     if (success) {
+      toast.success("Password reset successfully 🎉");
       setTimeout(() => navigate("/login"), 1000);
     }
   };
@@ -134,17 +148,50 @@ const ResetPassword = () => {
         {/* Password Input */}
         <div className="relative">
           <input
-            id="password"
-            type="password"
+            type={showpassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+           
             placeholder="Enter new password"
             className="
               peer w-full pl-10 pr-4 py-3 sm:py-4 rounded-xl
               bg-gray-950/70 border border-purple-800/40
-              text-gray-200 placeholder-transparent
+              text-gray-200 text-[20px]
               focus:outline-none focus:ring-2 focus:ring-purple-600
+            " required
+          />
+
+          <Lock
+            className="
+              absolute left-3 top-1/2 -translate-y-1/2
+              text-gray-400 transition-colors duration-200
+              peer-focus:text-purple-500
+              peer-not-placeholder-shown:text-purple-500
             "
+            size={22}
+          />
+          <button type="button" className='cursor-pointer' onClick={revielPassword}>{showpassword ? (<Eye
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={22}
+            />) : (<EyeClosed
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={22}
+            />)}</button>
+        </div>
+         {/* Confirm Password Input */}
+        <div className="relative">
+          <input
+            type={showconfirmpassword ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e) => setconfirmPassword(e.target.value)}
+            
+            placeholder="Confirm new password"
+            className=
+              {`peer w-full pl-10 pr-4 py-3 sm:py-4 rounded-xl
+              bg-gray-950/70 border border-purple-800/40
+              ${localError ? "text-red-400" : "text-gray-200"} text-[20px]
+              focus:outline-none focus:ring-2 focus:ring-purple-600`}
+            
             required
           />
 
@@ -157,22 +204,16 @@ const ResetPassword = () => {
             "
             size={22}
           />
-
-          <label
-            htmlFor="password"
-            className="
-              absolute left-10 top-1/2 -translate-y-1/2
-              bg-gray-900 px-1 text-gray-400 text-[16px] sm:text-[20px]
-              transition-all duration-200 cursor-text
-              peer-focus:top-px peer-focus:text-xs peer-focus:text-purple-500
-              peer-not-placeholder-shown:top-px
-              peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-purple-500
-            "
-          >
-            Enter new password
-          </label>
+          <button type="button" className='cursor-pointer' onClick={revielconfirmPassword}>{showconfirmpassword ? (<Eye
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={22}
+            />) : (<EyeClosed
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={22}
+            />)}</button>
+           
         </div>
-
+                {localError && <p className="text-[16px] text-red-400">{localError}</p>}
         <PasswordStrengthMeter password={password} />
 
         {/* Submit Button */}

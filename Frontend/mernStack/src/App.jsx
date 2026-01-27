@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+
 import Signup from "./components/Signup";
 import ResetPassword from "./components/ResetPassword";
 import HomePage from "./components/HomePage";
@@ -34,6 +36,7 @@ const RedirectAuthenticatedUser = ({ children }) => {
   }
   return children;
 };
+
 const VerifyEmailRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
@@ -48,9 +51,8 @@ const VerifyEmailRoute = ({ children }) => {
   return children;
 };
 
-
 const App = () => {
-    const location = useLocation();
+  const location = useLocation();
   const { checkAuth, isCheckingAuth } = useAuthStore();
 
   useEffect(() => {
@@ -58,88 +60,97 @@ const App = () => {
       return;
     }
     checkAuth();
-  }, [checkAuth,location.pathname]);
+  }, [checkAuth, location.pathname]);
 
- if (
-  isCheckingAuth &&
-  !location.pathname.startsWith("/reset-password")
-) {
-  return <LoadingSpinner />;
-}
-// from-gray-950 via-purple-950 to-gray-900
+  if (
+    isCheckingAuth &&
+    !location.pathname.startsWith("/reset-password")
+  ) {
+    return <LoadingSpinner />;
+  }
+
   return (
-    <div className=" min-h-screen 
-  flex 
-  items-center 
-  justify-center 
-  px-6 
-  py-6
-  bg-linear-to-r 
-  from-gray-950 
-  via-purple-950 
-  to-gray-900">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoutes>
-              <HomePage />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <RedirectAuthenticatedUser>
-              <Login />
-            </RedirectAuthenticatedUser>
-          }
-        />
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "#020617",
+            color: "#e5e7eb",
+            border: "1px solid #7c3aed",
+          },
+        }}
+      />
 
-        <Route
-          path="/signup"
-          element={
-            <RedirectAuthenticatedUser>
-              <Signup />
-            </RedirectAuthenticatedUser>
-          }
-        />
+      <div
+        className="min-h-screen flex items-center justify-center px-6 py-6
+        bg-linear-to-r from-gray-950 via-purple-950 to-gray-900"
+      >
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoutes>
+                <HomePage />
+              </ProtectedRoutes>
+            }
+          />
 
-        <Route
-          path="/verify-email"
-          element={
-            <VerifyEmailRoute>
-              <VerifyEmail />
-            </VerifyEmailRoute>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <RedirectAuthenticatedUser>
-              <ForgotPassword />
-            </RedirectAuthenticatedUser>
-          }
-        />
+          <Route
+            path="/login"
+            element={
+              <RedirectAuthenticatedUser>
+                <Login />
+              </RedirectAuthenticatedUser>
+            }
+          />
 
-        <Route
-          path="/after-forgotpass"
-          element={
-            <RedirectAuthenticatedUser>
-              <AfterForgotPass />
-            </RedirectAuthenticatedUser>
-          }
-        />
+          <Route
+            path="/signup"
+            element={
+              <RedirectAuthenticatedUser>
+                <Signup />
+              </RedirectAuthenticatedUser>
+            }
+          />
 
-        <Route
-          path="/reset-password/:token"
-          element={<ResetPassword/>}
-        />
+          <Route
+            path="/verify-email"
+            element={
+              <VerifyEmailRoute>
+                <VerifyEmail />
+              </VerifyEmailRoute>
+            }
+          />
 
-       <Route path="*" element={<div>404</div>} />
+          <Route
+            path="/forgot-password"
+            element={
+              <RedirectAuthenticatedUser>
+                <ForgotPassword />
+              </RedirectAuthenticatedUser>
+            }
+          />
 
-      </Routes>
-    </div>
+          <Route
+            path="/after-forgotpass"
+            element={
+              <RedirectAuthenticatedUser>
+                <AfterForgotPass />
+              </RedirectAuthenticatedUser>
+            }
+          />
+
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPassword />}
+          />
+
+          <Route path="*" element={<div>404</div>} />
+        </Routes>
+      </div>
+    </>
   );
 };
 

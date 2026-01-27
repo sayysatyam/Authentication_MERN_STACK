@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Loader, Lock, LogIn, Mail } from "lucide-react";
+import { Eye, EyeClosed, Loader, Lock, LogIn, Mail } from "lucide-react";
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../AuthStore/Store';
@@ -9,6 +9,7 @@ const Formm = () => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const { login, Logingerror, isLoading } = useAuthStore();
+  const [showpassword, setshowpassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +23,9 @@ const Formm = () => {
       navigate("/");
     }
   };
-
+   const revielPassword = () => {
+  setshowpassword(prev => !prev);
+};
   return (
     <div
       className="
@@ -106,7 +109,7 @@ const Formm = () => {
               size={22}
             />
             <input
-              type="password"
+              type={showpassword  ? "text" : "password"}
               placeholder="••••••••"
               value={Password}
               onChange={(e) => setPassword(e.target.value)}
@@ -119,6 +122,13 @@ const Formm = () => {
               "
               required
             />
+            <button type="button" className='cursor-pointer' onClick={revielPassword}>{showpassword ? (<Eye
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={22}
+            />) : (<EyeClosed
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={22}
+            />)}</button>
           </div>
         </div>
 

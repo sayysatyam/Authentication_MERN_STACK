@@ -3,7 +3,7 @@ import lock_main from "../assets/image/lock_main.png";
 import { Loader, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../AuthStore/Store";
-
+import toast from "react-hot-toast";
 const ForgotPassword = () => {
   const { forgetPassword, forgotPasserror, isLoading, clearError } = useAuthStore();
   const [forgotEmail, setForgotEmail] = useState("");
@@ -25,6 +25,7 @@ const ForgotPassword = () => {
     setLocalError("");
     const response = await forgetPassword(forgotEmail);
     if (response) {
+      toast.success("Reset Link Sent Successfully 🎉")
       navigate("/after-forgotpass");
     }
   };
