@@ -129,7 +129,7 @@ const UserSnapshot = ({ onChangeGoal }) => {
 
       {/* User */}
       <div className="flex items-center gap-4">
-        <div className="w-15 h-15 rounded-full overflow-hidden bg-purple-700/40 cursor-pointer hover:opacity-90">
+        <div className="w-15 h-15 rounded-full overflow-hidden bg-purple-700/20 cursor-pointer hover:opacity-90">
   <img
     src={
       user?.profilePic ||
