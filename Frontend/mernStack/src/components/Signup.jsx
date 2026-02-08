@@ -4,17 +4,31 @@ import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "./PasswordStrenght";
 import { useAuthStore } from "../AuthStore/Store";
 import toast from "react-hot-toast";
+import { GoogleLogin } from "@react-oauth/google";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showpassword, setshowpassword] = useState(false);
-  const { signup, signupError, isLoading, clearError } = useAuthStore();
+  const { signup, signupError, isLoading, clearError, googleLogin,isAuthenticated, user } = useAuthStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+  if (isAuthenticated && user?.isVerified) {
+    navigate("/");
+  }
+}, [isAuthenticated, user, navigate]);
 
   useEffect(() => {
     clearError();
   }, []);
+  const handleGoogleSuccess = async (credentialResponse) => {
+  const success = await googleLogin(credentialResponse.credential);
+
+  if (success) {
+    toast.success("Signed in with Google 🎉");
+  }
+};
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -41,6 +55,7 @@ const revielPassword = () => {
         bg-linear-to-br from-purple-950 to-gray-900
         shadow-[0_0_60px_rgba(147,51,234,0.25)]
         animate-fade-scale
+        
       "
     >
       {/* Header */}
@@ -71,6 +86,18 @@ const revielPassword = () => {
         </h3>
       </div>
 
+          <div className="flex justify-center">
+  <GoogleLogin
+    onSuccess={handleGoogleSuccess}
+    onError={() => toast.error("Google login failed")}
+  />
+</div>
+
+<div className="flex items-center gap-3">
+  <div className="h-px flex-1 bg-purple-800/40" />
+  <span className="text-gray-400 text-sm">OR</span>
+  <div className="h-px flex-1 bg-purple-800/40" />
+</div>
       {/* Form */}
       <form onSubmit={handleSignUp} className="flex flex-col gap-4 sm:gap-5 mt-2 sm:mt-4">
         {/* Name */}

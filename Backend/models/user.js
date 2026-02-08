@@ -17,7 +17,9 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: function () {
+        return this.provider === "local";
+  },
     },
     lastLogin: {
       type: Date,
@@ -80,6 +82,19 @@ weeklyCompleted: {
 },
 lastWeeklyReset: {
   type: Date,
+},
+provider: {
+  type: String,
+  enum: ["local", "google"],
+  default: "local",
+},
+
+googleId: {
+  type: String,
+},
+
+avatar: {
+  type: String,
 },
 },
   { timestamps: true },

@@ -1,9 +1,12 @@
 const user = require("../models/user");
 const bcryptjs = require("bcryptjs");
 const crypto = require("crypto");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const {generateVerificationCode} = require("../utilis/generateVerificationCode");
 const {generateTokenAndSetCookies} = require("../utilis/generateToken&setCookies");
 const {sendVerificationEmail,sendWelcomeEmail,sendPasswordResetEmail, sendResetSuccessEmail} = require("../Mailtrap/email");
+const { clientEncryption } = require("../models/quiz");
 const signup = async(req,res)=>{
     const {name,email,password} = req.body;
    try{
@@ -262,7 +265,56 @@ const checkAuth = async(req,res)=>{
         console.log("Error in checkAuth ", error);
 		res.status(500).json({ success: false, msg: error.message });
     }
+};
+
+const googleAuth = async(req,res)=>{
+  try {
+    const {token} = req.body;
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const { sub, email, name, picture } = ticket.getPayload();
+
+    let existingUser = await user.findOne({ email });
+
+    if(existingUser && existingUser.provider==="local"){
+       return res.status(400).json({
+        success: false,
+        msg: "This email is registered using password login",
+      });
+    };
+    if(!existingUser){
+      existingUser =  new user({
+        name,
+        email,
+        googleId: sub,
+        avatar: picture,
+        provider: "google",
+        isVerified: true,
+      });
+          await existingUser.save();
+    };
+    generateTokenAndSetCookies(res,existingUser._id);
+     existingUser.lastLogin = new Date();
+     await existingUser.save();
+     return res.status(200).json({
+      success: true,
+      msg: "Google login successful",
+      user: {
+        ...existingUser._doc,
+        password: undefined,
+      },
+    });
+  } catch (error) {
+    console.error("Google auth error:", error);
+    return res.status(401).json({
+      success: false,
+      msg: "Google authentication failed",
+    });
+  }
 }
-module.exports = {signup,login,logout,verifyEmail,forgotPassword,resetPassword,checkAuth,verifyResetToken,resendVerificationCode};
+module.exports = {signup,login,logout,verifyEmail,forgotPassword,resetPassword,checkAuth,verifyResetToken,resendVerificationCode,googleAuth};
 
 

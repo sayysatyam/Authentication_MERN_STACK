@@ -12,6 +12,8 @@ export const useAuthStore = create((set)=>({
     success:false,
     verifyLoading:false,
     isSingup:false,
+    googleLoading: false,
+    googleError: null,
     signup : async(name,email,password)=>{
             set({isLoading:true,signupError:null,isSingup:false});
             try{
@@ -152,6 +154,25 @@ profilePic : async(profilePic) =>{
      } catch (error) {
       set({error : error?.response?.data?.message|| "Error", isLoading:false})
      }
+},
+googleLogin : async(token)=>{
+    set({ googleLoading: true, googleError: null });
+    try {
+      const res = await axios.post(`${API_URL}/google`,{token},);
+       set({
+      user: res.data.user,
+      isAuthenticated: true,
+      googleLoading: false,
+    });
+    return true;
+    } catch (error) {
+      set({
+      googleError:
+        error.response?.data?.msg || "Google authentication failed",
+      googleLoading: false,
+    });
+    return false;
+    }
 }
 
 }));

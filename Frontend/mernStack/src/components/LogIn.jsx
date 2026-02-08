@@ -3,15 +3,29 @@ import { Eye, EyeClosed, Loader, Lock, LogIn, Mail } from "lucide-react";
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../AuthStore/Store';
-
+import { GoogleLogin } from "@react-oauth/google";
+import toast from "react-hot-toast";
 const Formm = () => {
   const { clearError } = useAuthStore();
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
-  const { login, Logingerror, isLoading } = useAuthStore();
+  const { login, Logingerror, isLoading,googleLogin,isAuthenticated, user } = useAuthStore();
   const [showpassword, setshowpassword] = useState(false);
   const navigate = useNavigate();
 
+
+    useEffect(() => {
+  if (isAuthenticated && user?.isVerified) {
+    navigate("/");
+  }
+}, [isAuthenticated, user, navigate]);
+const handleGoogleSuccess = async (credentialResponse) => {
+  const success = await googleLogin(credentialResponse.credential);
+
+  if (success) {
+    toast.success("Signed in with Google 🎉");
+  }
+};
   useEffect(() => {
     clearError();
   }, []);
@@ -68,6 +82,12 @@ const Formm = () => {
           Sign in to your account to continue
         </h3>
       </div>
+      <div className="flex justify-center">
+  <GoogleLogin
+    onSuccess={handleGoogleSuccess}
+    onError={() => toast.error("Google login failed")}
+  />
+</div>
 
       {/* Form */}
       <form onSubmit={handleLogIn} className="flex flex-col gap-4 sm:gap-5">
