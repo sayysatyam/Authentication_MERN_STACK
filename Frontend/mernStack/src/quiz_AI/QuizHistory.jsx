@@ -85,7 +85,7 @@ const showPrevious = () => {
     setshowExplanation(false);
     showPrevious();
   }}
-  className={` relative right-3
+  className={` relative right-5
     lg:hidden flex
     h-10 w-10 border-2 p-2 border-violet-700 rounded-full
     items-center justify-center

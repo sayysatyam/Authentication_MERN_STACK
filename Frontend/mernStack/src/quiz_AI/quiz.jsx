@@ -46,8 +46,6 @@ const timeAgo = (date) => {
 };
 return (
     <div className="min-h-screen flex flex-col items-center justify-center w-screen relative  px-4">
-       
-        <Background/>
       <img src={logo} className="w-20 h-20 animate-spin mt-10" />
       <div className=" max-w-3xl text-center relative py-10 w-screen px-4  ">
         

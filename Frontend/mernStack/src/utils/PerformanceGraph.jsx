@@ -27,7 +27,7 @@ const MyTooltip = ({ active, payload }) => {
 };
 const PerformanceGraph = ({ data = [] }) => {
   return (
-    <div className=" glass p-5 rounded-2xl border border-white/10 w-full h-full">
+    <div className=" glass p-5 rounded-2xl border border-white/10 w-full h-full focus:outline-none focus-visible:outline-none">
       <h3 className="text-white font-semibold mb-3 flex  gap-3 items-center">
         <ChartColumnIncreasing className="w-5 h-5 text-purple-400" /> Performance Trend
       </h3>

@@ -124,3 +124,28 @@
     transform: translateY(-20px);
   }
 }
+.recharts-wrapper *,
+.recharts-surface *,
+svg,
+svg * {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.recharts-wrapper:focus,
+.recharts-wrapper:focus-visible,
+.recharts-surface:focus,
+.recharts-surface:focus-visible,
+svg:focus,
+svg:focus-visible {
+  outline: none !important;
+}
+.recharts-wrapper,
+.recharts-surface,
+svg {
+  -webkit-tap-highlight-color: transparent !important;
+}
+.recharts-surface {
+  pointer-events: auto;
+  outline: none;
+}
