@@ -11,7 +11,7 @@ const verifyToken = (req,res,next )=>{
         }
         catch(error){
                 console.log("Error in verifyToken ", error);
-		return res.status(500).json({ success: false, message: "Server error" });
+		return res.status(401).json({ success: false, message: "Server error" });
         }
 }
 module.exports = {verifyToken};

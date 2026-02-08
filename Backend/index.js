@@ -26,6 +26,7 @@ connectMongoDb(process.env.MONGO_URI);
 
 app.use("/api/auth", authRoute);
 
+
 //
 if (process.env.NODE_ENV === "production") {
   const distPath = path.join(process.cwd(), "Frontend", "mernStack", "dist");

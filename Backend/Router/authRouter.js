@@ -1,7 +1,10 @@
 const express = require("express");
 const route = express.Router();
 const {login,logout,signup,verifyEmail,forgotPassword,resetPassword, checkAuth, verifyResetToken, resendVerificationCode} = require("../controller/auth");
-const {verifyToken} = require('../MiddleWare/user')
+const {verifyToken} = require('../MiddleWare/user');
+const { geminiResponse, calculate, fetchStat, recentActivity, recenttenActivity, getQuizHistory, userStreak, getWeeklyGoal, setWeeklyGoal, history } = require("../controller/quiz");
+const { uploadProfilePic } = require("../controller/upload");
+const upload = require("../MiddleWare/upload");
 route.get("/check-auth",verifyToken,checkAuth);
 route.post("/resendCode",verifyToken,resendVerificationCode);
 route.post("/signup",signup);
@@ -11,5 +14,15 @@ route.post("/logout",logout);
 route.post("/forgot-password",forgotPassword);
 route.get("/reset-password/:token", verifyResetToken);
 route.post("/reset-password/:token",resetPassword);
-
+route.post("/gemini",verifyToken,geminiResponse);
+route.post("/calculate",verifyToken,calculate);
+route.get("/fetchStat",verifyToken,fetchStat);
+route.get("/streak",verifyToken,userStreak);
+route.get("/weeklyGoal", verifyToken, getWeeklyGoal);
+route.post("/weeklyGoal", verifyToken, setWeeklyGoal);
+route.get("/recentActivity",verifyToken,recentActivity);
+route.get("/history",verifyToken,history);
+route.get("/recenttenActivity",verifyToken,recenttenActivity);
+route.get("/quiz-history/:quizId",verifyToken,getQuizHistory);
+route.put("/profile-pic",verifyToken,upload.single("profilePic"),uploadProfilePic);
 module.exports = route;

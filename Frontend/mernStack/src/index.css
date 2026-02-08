@@ -1,1 +1,126 @@
 @import "tailwindcss";
+
+/* =========================
+   Base Layer
+========================= */
+@layer base {
+  :root {
+    /* Theme colors */
+    --bg-start: 3 7 18;     /* gray-950 */
+    --bg-mid: 59 7 100;    /* purple-950 */
+    --bg-end: 17 24 39;    /* gray-900 */
+
+    --accent: 168 85 247;  /* purple-500 */
+    --indigo: 99 102 241;  /* indigo-500 */
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: white;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+
+    background: linear-gradient(
+      135deg,
+      rgb(var(--bg-start)),
+      rgb(var(--bg-mid)),
+      rgb(var(--bg-end))
+    );
+  }
+}
+
+/* =========================
+   Components
+========================= */
+@layer components {
+  .glass {
+    /* border-radius: 1rem; */
+    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .glass-hover {
+    transition: all 0.3s ease;
+  }
+
+  .glass-hover:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* =========================
+   Utilities
+========================= */
+@layer utilities {
+  .text-gradient {
+    background-image: linear-gradient(
+      90deg,
+      rgb(96 165 250),
+      rgb(168 85 247),
+      rgb(236 72 153)
+    );
+    background-clip: text;
+    color: transparent;
+  }
+
+  .nav-glow {
+    position: relative;
+  }
+
+  .nav-glow::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    height: 2px;
+    width: 0;
+    background: rgb(var(--accent));
+    box-shadow: 0 0 10px rgb(var(--accent));
+    transition: width 0.3s ease;
+  }
+  .recentActivity::-webkit-scrollbar{
+    display:none;
+}
+.recentActivity {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+  .nav-glow:hover::after {
+    width: 100%;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+/* =========================
+   Animations
+========================= */
+@keyframes glow {
+  from {
+    box-shadow: 0 0 6px rgb(var(--indigo)),
+                0 0 12px rgb(var(--indigo));
+  }
+  to {
+    box-shadow: 0 0 20px rgb(var(--accent)),
+                0 0 35px rgb(var(--accent));
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}

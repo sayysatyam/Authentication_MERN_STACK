@@ -139,6 +139,19 @@ verifyresettoken: async (token) => {
         } catch (error) {
             set({error:error.response?.data?.message|| "Error", isLoading:false,});
         }
+},
+profilePic : async(profilePic) =>{
+   const formData = new FormData();
+   formData.append("profilePic", profilePic);
+     set({isLoading:true,error:null});
+     try {
+      const response = await axios.put(`${API_URL}/profile-pic`,formData,{
+        withCredentials:true
+      });
+      set({profilePic : response.data.profilePic,isLoading:false})
+     } catch (error) {
+      set({error : error?.response?.data?.message|| "Error", isLoading:false})
+     }
 }
 
 }));

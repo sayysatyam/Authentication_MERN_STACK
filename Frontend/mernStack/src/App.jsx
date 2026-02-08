@@ -2,10 +2,6 @@ import React, { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
-import Signup from "./components/Signup";
-import ResetPassword from "./components/ResetPassword";
-import HomePage from "./components/HomePage";
 import Login from "./components/LogIn";
 import ForgotPassword from "./components/forgotPassword";
 import VerifyEmail from "./components/VerifyEmail";
@@ -13,6 +9,16 @@ import AfterForgotPass from "./components/AfterforgotPass";
 
 import { useAuthStore } from "./AuthStore/Store";
 import LoadingSpinner from "./component/LoaderSpiner";
+import Quiz from "./quiz_AI/quiz";
+import MCQ from "./quiz_AI/MCQ";
+import LandingPage from "./components/HomePage/Landing";
+import SignUp from "./components/Signup";
+import ResetPassword from "./components/ResetPassword";
+import Navbarr from "./components/HomePage/Navbarr";
+import Feature from "./quiz_AI/Feature";
+import QuizReview from "./quiz_AI/QuizHistory";
+import History from "./quiz_AI/History";
+
 
 const ProtectedRoutes = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -62,10 +68,7 @@ const App = () => {
     checkAuth();
   }, [checkAuth, location.pathname]);
 
-  if (
-    isCheckingAuth &&
-    !location.pathname.startsWith("/reset-password")
-  ) {
+  if (isCheckingAuth && !location.pathname.startsWith("/reset-password")) {
     return <LoadingSpinner />;
   }
 
@@ -87,13 +90,14 @@ const App = () => {
         className="min-h-screen flex items-center justify-center px-6 py-6
         bg-linear-to-r from-gray-950 via-purple-950 to-gray-900"
       >
+        <Navbarr />
         <Routes>
           <Route
             path="/"
             element={
-              <ProtectedRoutes>
-                <HomePage />
-              </ProtectedRoutes>
+              
+                <LandingPage />
+              
             }
           />
 
@@ -110,7 +114,7 @@ const App = () => {
             path="/signup"
             element={
               <RedirectAuthenticatedUser>
-                <Signup />
+                <SignUp />
               </RedirectAuthenticatedUser>
             }
           />
@@ -142,11 +146,19 @@ const App = () => {
             }
           />
 
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route
-            path="/reset-password/:token"
-            element={<ResetPassword />}
+            path="/ai-quiz"
+            element={
+              <ProtectedRoutes>
+                <Quiz />
+              </ProtectedRoutes>
+            }
           />
-
+          <Route path="/mcq" element={<MCQ />} />
+          <Route path="/feature" element={<ProtectedRoutes><Feature/></ProtectedRoutes>}/>
+         <Route path="/quiz-review/:quizId" element={<ProtectedRoutes><QuizReview /></ProtectedRoutes>} />
+         <Route path="/history" element={<ProtectedRoutes><History/></ProtectedRoutes>}/>
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </div>
