@@ -134,7 +134,7 @@ const UserSnapshot = ({ onChangeGoal }) => {
     src={
       user?.profilePic ||
       user?.avatar ||
-     "../../public/defaultAvatar.png"
+     "/defaultAvatar.png"
     }
     alt="profile"
     className="w-full h-full object-cover"
