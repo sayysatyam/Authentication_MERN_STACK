@@ -23,7 +23,8 @@ const UserSnapshot = ({ onChangeGoal }) => {
     fetchWeeklyGoal,
     weeklyCompleted,
   } = useQuizStore();
-  const { user } = useAuthStore();
+
+  const { user,profilePic,isLoading } = useAuthStore();
 
   const averageAccuracy =
     totalQuestionsGenerated > 0
@@ -41,6 +42,9 @@ const UserSnapshot = ({ onChangeGoal }) => {
   useEffect(() => {
     fetchWeeklyGoal();
   }, []);
+  useEffect(()=>{
+    profilePic();
+  },[]);
 
   const getSkillLevel = (accuracy) => {
     if (accuracy >= 75) return "Pro";
@@ -125,9 +129,17 @@ const UserSnapshot = ({ onChangeGoal }) => {
 
       {/* User */}
       <div className="flex items-center gap-4">
-        <div className="w-15 h-15 rounded-full bg-purple-700/40 flex items-center justify-center">
-          <User className="text-white" />
-        </div>
+        <div className="w-15 h-15 rounded-full overflow-hidden bg-purple-700/40 cursor-pointer hover:opacity-90">
+  <img
+    src={
+      user?.profilePic ||
+      user?.avatar ||
+      "/default-avatar.png"
+    }
+    alt="profile"
+    className="w-full h-full object-cover"
+  />
+</div>
         <div>
           <p className="text-lg font-semibold text-white">{user.name}</p>
           <span className={`text-xs px-3 py-1 rounded-full ${skillColor[skill]}`}>
