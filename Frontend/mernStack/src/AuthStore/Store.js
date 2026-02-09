@@ -186,6 +186,39 @@ googleLogin : async(token)=>{
     });
     return false;
     }
+},
+updateUserProfile: async (name, avatar) => {
+  set({ isLoading: true, error: null });
+
+  try {
+    const payload = {};
+    if (name && name.trim()) payload.name = name.trim();
+    if (avatar) payload.avatar = avatar;
+
+
+    if (Object.keys(payload).length === 0) {
+      set({ isLoading: false });
+      return false;
+    }
+
+    const res = await axios.put(
+      `${API_URL}/updateProfile`,
+      payload
+    );
+
+    set({
+      user: res.data.user,
+      isLoading: false,
+    });
+
+    return true;
+  } catch (error) {
+    set({
+      error: error.response?.data?.msg || "Error updating profile",
+      isLoading: false,
+    });
+    return false;
+  }
 }
 
 }));

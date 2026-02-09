@@ -314,7 +314,55 @@ const googleAuth = async(req,res)=>{
       msg: "Google authentication failed",
     });
   }
+};
+const updateUserProfile = async(req,res)=>{
+
+  try{
+    const {name,avatar} = req.body;
+   if(!name && !avatar){
+     return res.status(400).json({
+        success: false,
+        msg: "Nothing to update",
+      });
+   };
+       const updateFields = {};
+       if(name){
+        if(typeof name !=="string" || name.trim().length < 2){
+          return res.status(400).json({
+            success : false,
+            msg:"Invalid Name"
+          });
+        }
+        updateFields.name = name.trim();
+       };
+       if (avatar) {
+  updateFields.profilePic = avatar;
 }
-module.exports = {signup,login,logout,verifyEmail,forgotPassword,resetPassword,checkAuth,verifyResetToken,resendVerificationCode,googleAuth};
+   const availableUser = await user.findByIdAndUpdate(req.userId,updateFields,{new:true});
+    if (!availableUser) {
+      return res.status(404).json({
+        success: false,
+        msg: "User not found",
+      });
+    }
+    return res.status(200).json({
+      msg:"Profile updated successfully",
+            user: {
+        _id: availableUser._id,
+        name: availableUser.name,
+        email: availableUser.email,
+        avatar: availableUser.avatar,
+        profilePic: availableUser.profilePic,
+      },
+    })
+   }catch(error){
+    return res.status(500).json({
+      success: false,
+      msg: "Server error while changing name",
+    });
+   }
+}
+
+module.exports = {signup,login,logout,verifyEmail,forgotPassword,resetPassword,checkAuth,verifyResetToken,resendVerificationCode,googleAuth,updateUserProfile};
 
 

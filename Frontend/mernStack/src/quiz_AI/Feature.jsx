@@ -88,7 +88,7 @@ const accuracyRemarks = () => {
   return "Outstanding! You're mastering this 🏆";
 };
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1.7fr_0.9fr] gap-10 h-screen px-5 w-full py-20">
+    <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1.7fr_0.9fr] gap-10 h-screen px-5 w-full py-20 relative bottom-10">
   {/* Column 1 */}
   <div className="flex flex-col gap-4 ">
     <div className=" rounded-xl flex-1">

@@ -1,6 +1,6 @@
 const express = require("express");
 const route = express.Router();
-const {login,logout,signup,verifyEmail,forgotPassword,resetPassword, checkAuth, verifyResetToken, resendVerificationCode, googleAuth} = require("../controller/auth");
+const {login,logout,signup,verifyEmail,forgotPassword,resetPassword, checkAuth, verifyResetToken, resendVerificationCode, googleAuth, updateUserProfile} = require("../controller/auth");
 const {verifyToken} = require('../MiddleWare/user');
 const { geminiResponse, calculate, fetchStat, recentActivity, recenttenActivity, getQuizHistory, userStreak, getWeeklyGoal, setWeeklyGoal, history } = require("../controller/quiz");
 const { uploadProfilePic } = require("../controller/upload");
@@ -26,4 +26,5 @@ route.get("/history",verifyToken,history);
 route.get("/recenttenActivity",verifyToken,recenttenActivity);
 route.get("/quiz-history/:quizId",verifyToken,getQuizHistory);
 route.put("/profile-pic",verifyToken,upload.single("profilePic"),uploadProfilePic);
+route.put("/updateProfile",verifyToken,updateUserProfile);
 module.exports = route;

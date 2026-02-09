@@ -18,6 +18,7 @@ import Navbarr from "./components/HomePage/Navbarr";
 import Feature from "./quiz_AI/Feature";
 import QuizReview from "./quiz_AI/QuizHistory";
 import History from "./quiz_AI/History";
+import UpdateProfile from "./components/UpdateProfile";
 
 
 const ProtectedRoutes = ({ children }) => {
@@ -87,7 +88,7 @@ const App = () => {
       />
 
       <div
-        className="min-h-screen flex items-center justify-center px-6 py-6
+        className="min-h-screen flex items-center justify-center px-6 py-20
         bg-linear-to-r from-gray-950 via-purple-950 to-gray-900"
       >
         <Navbarr />
@@ -159,6 +160,7 @@ const App = () => {
           <Route path="/feature" element={<ProtectedRoutes><Feature/></ProtectedRoutes>}/>
          <Route path="/quiz-review/:quizId" element={<ProtectedRoutes><QuizReview /></ProtectedRoutes>} />
          <Route path="/history" element={<ProtectedRoutes><History/></ProtectedRoutes>}/>
+         <Route path="update" element={<ProtectedRoutes><UpdateProfile/></ProtectedRoutes>}/>
           <Route path="*" element={<div>404</div>} />
         </Routes>
       </div>

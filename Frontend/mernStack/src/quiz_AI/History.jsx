@@ -20,7 +20,7 @@ const History = () => {
   return `${Math.floor(hours / 24)} days ago`;
 };
   return (
-    <div className='py-20 w-full  '>
+    <div className='py-20 w-full relative bottom-10  '>
       <motion.div
   initial={{ opacity: 0, scale: 0.95 }}
   whileInView={{ opacity: 1, scale: 1 }}
